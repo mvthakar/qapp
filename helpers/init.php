@@ -71,6 +71,22 @@ function getRequestBody()
     return json_decode($jsonString);
 }
 
+function mustBeLoggedIn()
+{
+    $request = getRequestBody();
+    if (!isset($request->userId))
+    {
+        http_response_code(403);
+        exit();
+    }
+}
+
+function getLoggedInUser()
+{
+    $request = getRequestBody();
+    return selectOne("SELECT `Email`, `UserRoleId` FROM `Users` WHERE `Id` = ?", [$request->userId]);
+}
+
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: *");
 header("Access-Control-Allow-Headers: *");
