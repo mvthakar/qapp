@@ -8,8 +8,8 @@ define("BASE_URL", "/qapp");
 
 date_default_timezone_set('Asia/Kolkata');
 $connection = new PDO(
-    "mysql:host=localhost;port=3306;dbname=QApp", 
-    "root", 
+    "mysql:host=localhost;port=3306;dbname=QApp",
+    "root",
     ""
 );
 
@@ -26,7 +26,7 @@ function urlOf($path)
 function execute($query, $params = null)
 {
     global $connection;
-    
+
     $statement = $connection->prepare($query);
     return $statement->execute($params);
 }
@@ -74,8 +74,7 @@ function getRequestBody()
 function mustBeLoggedIn()
 {
     $request = getRequestBody();
-    if (!isset($request->userId))
-    {
+    if (!isset($request->userId)) {
         http_response_code(403);
         exit();
     }
@@ -85,14 +84,24 @@ function getLoggedInUser()
 {
     $request = getRequestBody();
     $user = selectOne("SELECT `Id`, `Email`, `IsVerified`, `UserRoleId` FROM `Users` WHERE `Id` = ?", [$request->userId]);
-    
-    if ($user == null)
-    {
+
+    if ($user == null) {
         http_response_code(403);
         exit();
     }
 
     return $user;
+}
+
+function allowedMethods($methods)
+{
+    array_push($methods, 'OPTIONS');
+    $currentMethod = $_SERVER['REQUEST_METHOD'];
+
+    if (!in_array($currentMethod, $methods)) {
+        http_response_code(405);
+        exit();
+    }
 }
 
 header("Access-Control-Allow-Origin: *");
