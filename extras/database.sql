@@ -13,20 +13,29 @@ CREATE TABLE `Users`
     `Id` INT PRIMARY KEY AUTO_INCREMENT,
     `Email` VARCHAR(200) NOT NULL,
     `PasswordHash` VARCHAR(500) NOT NULL,
-    `IsVerified` INT(1) NOT NULL DEFAULT 0,
 
     `UserRoleId` INT NOT NULL,
     CONSTRAINT `FkUserRoleIdInUsers` FOREIGN KEY (`UserRoleId`) REFERENCES `UserRoles`(`Id`)
 );
 
-CREATE TABLE `OTP`
+CREATE TABLE `SignUpOTPs`
 (
     `Id` INT PRIMARY KEY AUTO_INCREMENT,
     `GeneratedOTP` VARCHAR(6) NOT NULL,
     `GeneratedOn` DATETIME NOT NULL,
+    `ExpiresOn` DATETIME NOT NULL,
+    `Email` VARCHAR(200) NOT NULL
+);
+
+CREATE TABLE `ForgotPasswordOTPs`
+(
+    `Id` INT PRIMARY KEY AUTO_INCREMENT,
+    `GeneratedOTP` VARCHAR(6) NOT NULL,
+    `GeneratedOn` DATETIME NOT NULL,
+    `ExpiresOn` DATETIME NOT NULL,
 
     `UserId` INT NOT NULL,
-    CONSTRAINT `FkUserIdInOTP` FOREIGN KEY (`UserId`) REFERENCES `Users`(`Id`)
+    CONSTRAINT `FkUserIdInForgotPasswordOTPs` FOREIGN KEY (`UserId`) REFERENCES `Users`(`Id`)
 );
 
 CREATE TABLE `Profiles`
