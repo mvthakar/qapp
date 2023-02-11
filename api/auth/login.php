@@ -1,6 +1,7 @@
 <?php
 
 require '../../helpers/init.php';
+allowedMethods(['POST']);
 
 $request = getRequestBody();
 if (!isset($request->email) || !isset($request->password))
