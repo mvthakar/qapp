@@ -3,11 +3,9 @@
 require '../../helpers/init.php';
 
 allowedMethods(['POST']);
-mustBeLoggedIn();
+$request = mustBeLoggedIn();
 
-$request = getRequestBody();
-
-if (!isset($request->name)) {
+if (!isset($name)) {
     http_response_code(400);
     die(json_encode(["message" => "Incomplete data"]));
 }
@@ -15,8 +13,9 @@ if (!isset($request->name)) {
 $user = getLoggedInUser();
 $userId = $user['Id'];
 
+$name = htmlspecialchars($request->name);
 $profile = selectOne("SELECT * FROM `Profiles` WHERE UserId = ?", [$userId]);
 if ($profile != null)
-    execute("UPDATE `Profiles` SET `Name` = ? WHERE `UserId` = ?", [$request->name, $userId]);
+    execute("UPDATE `Profiles` SET `Name` = ? WHERE `UserId` = ?", [$name, $userId]);
 else
-    execute("INSERT INTO `Profiles` SET `Name` = ?, `UserId` = ?", [$request->name, $userId]);
+    execute("INSERT INTO `Profiles` SET `Name` = ?, `UserId` = ?", [$name, $userId]);
