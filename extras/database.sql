@@ -71,7 +71,8 @@ CREATE TABLE `QuestionImages`
 CREATE TABLE `Categories`
 (
     `Id` INT PRIMARY KEY AUTO_INCREMENT,
-    `Name` VARCHAR(200) NOT NULL
+    `Name` VARCHAR(200) NOT NULL,
+    `IsDeleted` INT(1) NOT NULL DEFAULT 0
 );
 
 CREATE TABLE `QuestionCategories`
