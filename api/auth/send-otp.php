@@ -18,6 +18,11 @@ if (!isset($request->email)) {
 }
 
 $email = $request->email;
+if (!validateEmail($email)) {
+    http_response_code(400);
+    die(json_encode(["message" => "Invalid email!"]));
+}
+
 $user = selectOne("SELECT * FROM `Users` WHERE `Email` = ?", [$email]);
 
 if ($mode == 'sigup' && $user != null) {

@@ -4,8 +4,7 @@ require '../../helpers/init.php';
 allowedMethods(['POST']);
 
 $request = getRequestBody();
-if (!isset($request->email) || !isset($request->password))
-{
+if (!isset($request->email) || !isset($request->password)) {
     http_response_code(400);
     die(json_encode(["message" => "Incomplete data"]));
 }
@@ -13,9 +12,13 @@ if (!isset($request->email) || !isset($request->password))
 $email = $request->email;
 $password = $request->password;
 
+if (!validateEmail($email)) {
+    http_response_code(400);
+    die(json_encode(["message" => "Invalid email!"]));
+}
+
 $user = selectOne("SELECT * FROM `Users` WHERE `Email` = ?", [$email]);
-if ($user == null || !password_verify($password, $user['PasswordHash']))
-{
+if ($user == null || !password_verify($password, $user['PasswordHash'])) {
     http_response_code(403);
     die(json_encode(["message" => "Wrong email or password!"]));
 }

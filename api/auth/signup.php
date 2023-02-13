@@ -13,6 +13,11 @@ $otp = $request->otp;
 $email = $request->email;
 $password = $request->password;
 
+if (!validateEmail($email)) {
+    http_response_code(400);
+    die(json_encode(["message" => "Invalid email!"]));
+}
+
 $signUpOtp = selectOne("SELECT * FROM `SignUpOTPs` WHERE `Email` = ?", [$email]);
 if ($signUpOtp == null || $signUpOtp['GeneratedOTP'] != $otp) {
     http_response_code(403);

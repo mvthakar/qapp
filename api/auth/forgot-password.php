@@ -13,6 +13,11 @@ $otp = $request->otp;
 $email = $request->email;
 $password = $request->password;
 
+if (!validateEmail($email)) {
+    http_response_code(400);
+    die(json_encode(["message" => "Invalid email!"]));
+}
+
 $user = selectOne("SELECT * FROM `Users` WHERE `Email` = ?", [$email]);
 if ($user == null) {
     http_response_code(404);
