@@ -42,7 +42,7 @@ CREATE TABLE `Profiles`
 (
     `Id` INT PRIMARY KEY AUTO_INCREMENT,
     `Name` VARCHAR(200) NOT NULL,
-    `DisplayPicture` VARCHAR(300) NOT NULL,
+    `DisplayPicture` VARCHAR(300),
 
     `UserId` INT NOT NULL,
     CONSTRAINT `FkUserIdInProfiles` FOREIGN KEY (`UserId`) REFERENCES `Users`(`Id`)
