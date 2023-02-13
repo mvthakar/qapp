@@ -78,6 +78,26 @@ function mustBeLoggedIn()
         http_response_code(403);
         exit();
     }
+
+    return $request;
+}
+
+function mustBeAdmin()
+{
+    $request = getRequestBody();
+    
+    if (!isset($request->userId)) {
+        http_response_code(403);
+        exit();
+    }
+
+    $user = getLoggedInUser();
+    if ($user['UserRoleId'] != 1) {
+        http_response_code(401);
+        exit();
+    }
+
+    return $request;
 }
 
 function getLoggedInUser()
@@ -104,7 +124,12 @@ function allowedMethods($methods)
     }
 }
 
-header('Content-Type: application/json');
+function validateEmail($email) {
+    $pattern = '/^([A-Za-z0-9]+[\.\-_]?)+[A-Za-z0-9]+@([A-Za-z0-9]+[\.\-]?)+[A-Za-z0-9]+\.[A-Za-z]+$/';
+    return preg_match($pattern, $email);
+}
+
+// header('Content-Type: application/json');
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: *");
