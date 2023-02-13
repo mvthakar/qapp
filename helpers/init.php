@@ -83,7 +83,7 @@ function mustBeLoggedIn()
 function getLoggedInUser()
 {
     $request = getRequestBody();
-    $user = selectOne("SELECT `Id`, `Email`, `IsVerified`, `UserRoleId` FROM `Users` WHERE `Id` = ?", [$request->userId]);
+    $user = selectOne("SELECT `Id`, `Email`, `UserRoleId` FROM `Users` WHERE `Id` = ?", [$request->userId]);
 
     if ($user == null) {
         http_response_code(403);
@@ -103,6 +103,8 @@ function allowedMethods($methods)
         exit();
     }
 }
+
+header('Content-Type: application/json');
 
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: *");
