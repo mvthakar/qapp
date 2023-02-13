@@ -30,5 +30,5 @@ function sendEmail($receiverEmail, $subject, $body)
     $mail->Subject = $subject;
     $mail->Body = $body;
 
-    $mail->send();
+    // $mail->send();
 }
