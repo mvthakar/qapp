@@ -56,16 +56,9 @@ CREATE TABLE `Questions`
     `PostedOn` DATETIME NOT NULL,
 
     `PosterUserId` INT NOT NULL,
-    CONSTRAINT `FkPosterUserIdInQuestions` FOREIGN KEY (`PosterUserId`) REFERENCES `Users`(`Id`)
-);
+    CONSTRAINT `FkPosterUserIdInQuestions` FOREIGN KEY (`PosterUserId`) REFERENCES `Users`(`Id`),
 
-CREATE TABLE `QuestionImages`
-(
-    `Id` INT PRIMARY KEY AUTO_INCREMENT,
-    `Name` VARCHAR(300) NOT NULL,
-
-    `QuestionId` INT NOT NULL,
-    CONSTRAINT `FkQuestionIdInQuestionImages` FOREIGN KEY (`QuestionId`) REFERENCES `Questions`(`Id`)
+    `IsDeleted` INT(1) NOT NULL DEFAULT 0
 );
 
 CREATE TABLE `Categories`
@@ -96,16 +89,9 @@ CREATE TABLE `Answers`
     CONSTRAINT `FkUserIdInAnswers` FOREIGN KEY (`UserId`) REFERENCES `Users`(`Id`),
 
     `QuestionId` INT NOT NULL,
-    CONSTRAINT `FkQuestionIdInAnswers` FOREIGN KEY (`QuestionId`) REFERENCES `Questions`(`Id`)
-);
+    CONSTRAINT `FkQuestionIdInAnswers` FOREIGN KEY (`QuestionId`) REFERENCES `Questions`(`Id`),
 
-CREATE TABLE `AnswerImages`
-(
-    `Id` INT PRIMARY KEY AUTO_INCREMENT,
-    `Name` VARCHAR(300) NOT NULL,
-
-    `AnswerId` INT NOT NULL,
-    CONSTRAINT `FkAnswerIdInAnswerImages` FOREIGN KEY (`AnswerId`) REFERENCES `Answers`(`Id`)
+    `IsDeleted` INT(1) NOT NULL DEFAULT 0
 );
 
 INSERT INTO `UserRoles` SET `Name` = 'Admin';
