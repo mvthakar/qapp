@@ -25,7 +25,8 @@ if ($signUpOtp == null || $signUpOtp['GeneratedOTP'] != $otp) {
 }
 
 $currentDate = new DateTime();
-$expiresOn = DateTime::createFromFormat('Y-m-d h:i:s', $signUpOtp['ExpiresOn']);
+$expiresOn = DateTime::createFromFormat('Y-m-d H:i:s', $signUpOtp['ExpiresOn']);
+
 if ($currentDate > $expiresOn) {
     execute("DELETE FROM `SignUpOTPs` WHERE `Email` = ?", [$email]);
     

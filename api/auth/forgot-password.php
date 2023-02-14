@@ -31,7 +31,7 @@ if ($forgotPasswordOtp == null || $forgotPasswordOtp['GeneratedOTP'] != $otp) {
 }
 
 $currentDate = new DateTime();
-$expiresOn = DateTime::createFromFormat('Y-m-d h:i:s', $forgotPasswordOtp['ExpiresOn']);
+$expiresOn = DateTime::createFromFormat('Y-m-d H:i:s', $forgotPasswordOtp['ExpiresOn']);
 if ($currentDate > $expiresOn) {
     execute("DELETE FROM `ForgotPasswordOTPs` WHERE `UserId` = ?", [$user['Id']]);
     

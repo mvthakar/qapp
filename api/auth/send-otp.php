@@ -34,8 +34,8 @@ if ($mode == 'sigup' && $user != null) {
 }
 
 $otp = random_int(111111, 999999);
-$generatedOn = (new DateTime())->format('Y-m-d h:i:s');
-$expiresOn = ((new DateTime())->add(new DateInterval('PT5M')))->format('Y-m-d h:i:s');
+$generatedOn = (new DateTime())->format('Y-m-d H:i:s');
+$expiresOn = ((new DateTime())->add(new DateInterval('PT5M')))->format('Y-m-d H:i:s');
 
 try {
     $subject = 'QApp OTP';
