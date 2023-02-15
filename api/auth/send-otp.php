@@ -25,7 +25,7 @@ if (!validateEmail($email)) {
 
 $user = selectOne("SELECT * FROM `Users` WHERE `Email` = ?", [$email]);
 
-if ($mode == 'sigup' && $user != null) {
+if ($mode == 'signup' && $user != null) {
     http_response_code(409);
     die(json_encode(["message" => "Could not sign up with this email!"]));
 } else if ($mode == 'forgot-password' && $user == null) {
@@ -42,7 +42,7 @@ try {
     $body = "Your OTP: $otp";
 
     sendEmail($email, $subject, $body);
-    
+
     if ($mode == 'signup')
         execute("INSERT INTO `SignUpOTPs` SET `GeneratedOTP` = ?, `GeneratedOn` = ?, `ExpiresOn` = ?, `Email` = ?", [$otp, $generatedOn, $expiresOn, $email]);
     else
