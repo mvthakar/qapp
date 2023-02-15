@@ -3,15 +3,36 @@
 require '../../helpers/init.php';
 allowedMethods(['GET']);
 
-function getRecentQuestions()
+$search = $_GET['search'] ?? null;
+$searchQuery = $search != null ? "AND `Title` LIKE '%$search%'" : '';
+$orderBy = $_GET['orderBy'] ?? 'DESC';
+$by = $_GET['by'] ?? '';
+
+switch ($by) {
+    case 'user':
+        getQuestionsByUser();
+        break;  
+    case 'category':
+        getQuestionsByCategory();
+        break;
+    case 'answers':
+        getQuestionsByNumberOfAnswers();
+        break;
+    default:
+        getQuestionsByTime();
+        break;
+}
+
+function getQuestionsByTime()
 {
+    global $searchQuery, $orderBy;
     $questions = select(
         "SELECT 
             `Questions`.`Id`, `Title`, `PostedOn`, `Profiles`.`Name` AS `PosterUserName`
             FROM `Questions` 
             INNER JOIN `Profiles` ON `Questions`.`PosterUserId` = `Profiles`.`UserId` 
-            WHERE `IsDeleted` = 0 
-            ORDER BY `PostedOn` DESC
+            WHERE `IsDeleted` = 0 $searchQuery
+            ORDER BY `PostedOn` $orderBy
         "
     );
 
@@ -33,7 +54,10 @@ function getRecentQuestions()
 
 function getQuestionsByCategory()
 {
+    global $searchQuery, $orderBy;
+
     if (!isset($_GET['categoryId'])) {
+        http_response_code(400);
         die(json_encode(['message' => 'Category is required']));
     }
 
@@ -44,7 +68,8 @@ function getQuestionsByCategory()
             FROM `QuestionCategories`
             INNER JOIN `Questions` ON `QuestionCategories`.`Questionid` = `Questions`.`Id`
             INNER JOIN `Profiles` ON `Questions`.`PosterUserId` = `Profiles`.`UserId` 
-            WHERE `CategoryId` = ? AND `Questions`.`IsDeleted` = 0",
+            WHERE `CategoryId` = ? AND `Questions`.`IsDeleted` = 0 $searchQuery
+            ORDER BY `PostedOn` $orderBy",
         [$categoryId]
     );
 
@@ -53,15 +78,21 @@ function getQuestionsByCategory()
 
 function getQuestionsByUser()
 {
-    $userId = $_GET['userId'];
+    global $searchQuery, $orderBy;
 
+    if (!isset($_GET['userId'])) {
+        http_response_code(400);
+        die(json_encode(['message' => 'User is required']));
+    }
+
+    $userId = $_GET['userId'];
     $questions = select(
         "SELECT 
             `Questions`.`Id`, `Title`, `PostedOn`, `Profiles`.`Name` AS `PosterUserName`
             FROM `Questions` 
             INNER JOIN `Profiles` ON `Questions`.`PosterUserId` = `Profiles`.`UserId` 
-            WHERE `IsDeleted` = 0 AND `PosterUserId` = ?
-            ORDER BY `PostedOn` DESC
+            WHERE `IsDeleted` = 0 AND `PosterUserId` = ? $searchQuery
+            ORDER BY `PostedOn` $orderBy
         ",
         [$userId]
     );
@@ -82,6 +113,22 @@ function getQuestionsByUser()
     echo json_encode($questions);
 }
 
-// getRecentQuestions();
-// getQuestionsByCategory();
-getQuestionsByUser();
+function getQuestionsByNumberOfAnswers()
+{
+    global $searchQuery, $orderBy;
+
+    $questions = select(
+        "SELECT 
+            `Questions`.`Id`, 
+            `Title`, 
+            `Questions`.`PostedOn`, 
+            `Profiles`.`Name` AS `PosterUserName`, 
+            (SELECT COUNT(*) FROM `Answers` WHERE `QuestionId` = `Questions`.`Id`) AS `NumberOfAnswers`
+        FROM `Questions`
+        INNER JOIN `Profiles` ON `Questions`.`PosterUserId` = `Profiles`.`UserId` 
+        WHERE `IsDeleted` = 0 $searchQuery
+        ORDER BY `NumberOfAnswers` $orderBy
+    ");
+
+    echo json_encode($questions);
+}
