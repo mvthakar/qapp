@@ -21,7 +21,7 @@ function mustBeAdmin()
     }
 
     $user = getLoggedInUser();
-    if ($user['UserRoleId'] != 1) {
+    if ($user['UserType'] != 'A') {
         http_response_code(401);
         exit();
     }
@@ -32,7 +32,7 @@ function mustBeAdmin()
 function getLoggedInUser()
 {
     $request = getRequestBody();
-    $user = selectOne("SELECT `Id`, `Email`, `UserRoleId` FROM `Users` WHERE `Id` = ?", [$request->userId]);
+    $user = selectOne("SELECT `Id`, `Email`, `UserType` FROM `Users` WHERE `Id` = ?", [$request->userId]);
 
     if ($user == null) {
         http_response_code(403);

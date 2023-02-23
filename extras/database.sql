@@ -2,20 +2,12 @@ DROP DATABASE IF EXISTS `QApp`;
 CREATE DATABASE `QApp`;
 USE `QApp`;
 
-CREATE TABLE `UserRoles`
-(
-    `Id` INT PRIMARY KEY AUTO_INCREMENT,
-    `Name` VARCHAR(200) NOT NULL
-);
-
 CREATE TABLE `Users`
 (
     `Id` INT PRIMARY KEY AUTO_INCREMENT,
     `Email` VARCHAR(200) NOT NULL,
     `PasswordHash` VARCHAR(500) NOT NULL,
-
-    `UserRoleId` INT NOT NULL,
-    CONSTRAINT `FkUserRoleIdInUsers` FOREIGN KEY (`UserRoleId`) REFERENCES `UserRoles`(`Id`)
+    `UserType` VARCHAR(10) NOT NULL
 );
 
 CREATE TABLE `SignUpOTPs`
@@ -94,5 +86,5 @@ CREATE TABLE `Answers`
     `IsDeleted` INT(1) NOT NULL DEFAULT 0
 );
 
-INSERT INTO `UserRoles` SET `Name` = 'Admin';
-INSERT INTO `UserRoles` SET `Name` = 'User';
+-- Password: 123
+INSERT INTO `Users` SET `Id` = 1, `Email` = 'admin@gmail.com', `UserType` = 'Admin', `Password` = '$2y$10$1owshVHI9vvsOFZaBbPNQOSRMDBzEu8IDOKIQEOCskClGezK04hEu';
