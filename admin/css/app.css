@@ -1,0 +1,85 @@
+#btn-preview {
+    min-width: 5rem !important;
+}
+
+#btn-submit {
+    min-width: 6rem !important;
+}
+
+#brand-logo {
+    width: 50%;
+}
+
+.img-preview {
+    width: 200px;
+    height: 150px;
+    margin-right: 10px;
+}
+
+.card-primary:not(.card-outline)>.card-header {
+    background-color: #343a40;
+}
+
+.btn-login {
+    border-color: #343a40;
+    background-color: #343a40;
+}
+
+.btn-login:hover {
+    border-color: #343a40d5;
+    background-color: #343a40d5;
+}
+
+.btn-login:not(:disabled):not(.disabled):active {
+    border-color: #191c20;
+    background-color: #191c20;
+}
+
+.btn-login:focus {
+    border-color: #191c20;
+    background-color: #191c20;
+}
+
+.btn-login:disabled {
+    border-color: #656b74;
+    background-color: #656b74;
+}
+
+.item-list th, .item-list td {
+    vertical-align: middle;
+}
+
+.item-list-number {
+    text-align: center;
+}
+
+.img-wrap {
+    position: relative;
+}
+
+.img-preview.deleting { 
+    opacity: 0.3;
+}
+
+.img-wrap .delete-spinner {
+    position: absolute;
+    z-index: 100;
+    top: 11px;
+    right: 21px;
+}
+
+.img-wrap .delete {
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    z-index: 100;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+}
+
+#student-photo-preview {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
