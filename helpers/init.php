@@ -2,7 +2,6 @@
 
 date_default_timezone_set('Asia/Kolkata');
 
-header('Content-Type: application/json');
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: *");
 header("Access-Control-Allow-Headers: *");
@@ -24,6 +23,18 @@ function getRequestBody()
 {
     $jsonString = file_get_contents("php://input");
     return json_decode($jsonString);
+}
+
+function jsonResponse($items)
+{
+    header("Content-Type: application/json");
+    echo json_encode($items);
+}
+
+function jsonResponseAndDie($items)
+{
+    header("Content-Type: application/json");
+    die(json_encode($items));
 }
 
 require_once pathOf('helpers/database.php');
