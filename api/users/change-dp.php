@@ -5,7 +5,7 @@ allowedMethods(['POST']);
 
 if (!isset($_FILES['dp'])) {
     http_response_code(400);
-    die(json_encode(["message" => "Incomplete data"]));
+    jsonResponseAndDie(["message" => "Incomplete data"]);
 }
 
 $userId = $_GET['userId'];

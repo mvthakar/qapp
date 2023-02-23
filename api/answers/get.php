@@ -5,7 +5,7 @@ allowedMethods(['GET']);
 
 if (!isset($_GET['questionId'])) {
     http_response_code(400);
-    die(json_encode(["message" => "Incomplete data"]));
+    jsonResponseAndDie(["message" => "Incomplete data"]);
 }
 
 $questionId = $_GET['questionId'];
@@ -19,4 +19,4 @@ $questions = select(
     [0, $questionId]
 );
 
-echo json_encode($questions);
+jsonResponse($questions);

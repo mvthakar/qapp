@@ -7,7 +7,7 @@ $request = mustBeLoggedIn();
 
 if (!isset($name)) {
     http_response_code(400);
-    die(json_encode(["message" => "Incomplete data"]));
+    jsonResponseAndDie(["message" => "Incomplete data"]);
 }
 
 $user = getLoggedInUser();

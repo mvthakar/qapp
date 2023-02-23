@@ -7,7 +7,7 @@ $request = mustBeLoggedIn();
 
 if (!isset($request->id)) {
     http_response_code(400);
-    die(json_encode(["message" => "Incomplete data"]));
+    jsonResponseAndDie(["message" => "Incomplete data"]);
 }
 
 $id = $request->id;

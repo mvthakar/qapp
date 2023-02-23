@@ -7,7 +7,7 @@ $request = mustBeLoggedIn();
 
 if (!isset($request->title) || !isset($request->textContent) || !isset($request->categories)) {
     http_response_code(400);
-    die(json_encode(["message" => "Incomplete data"]));
+    jsonResponseAndDie(["message" => "Incomplete data"]);
 }
 
 $title = htmlspecialchars($request->title);

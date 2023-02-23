@@ -49,7 +49,7 @@ function getQuestionsByTime()
         $questions[$i]["categories"] = $questionCategories;
     }
 
-    echo json_encode($questions);
+    jsonResponse($questions);
 }
 
 function getQuestionsByCategory()
@@ -58,7 +58,7 @@ function getQuestionsByCategory()
 
     if (!isset($_GET['categoryId'])) {
         http_response_code(400);
-        die(json_encode(['message' => 'Category is required']));
+        jsonResponseAndDie(['message' => 'Category is required']);
     }
 
     $categoryId = $_GET['categoryId'];
@@ -73,7 +73,7 @@ function getQuestionsByCategory()
         [$categoryId]
     );
 
-    echo json_encode($questions);
+    jsonResponse($questions);
 }
 
 function getQuestionsByUser()
@@ -82,7 +82,7 @@ function getQuestionsByUser()
 
     if (!isset($_GET['userId'])) {
         http_response_code(400);
-        die(json_encode(['message' => 'User is required']));
+        jsonResponseAndDie(['message' => 'User is required']);
     }
 
     $userId = $_GET['userId'];
@@ -110,7 +110,7 @@ function getQuestionsByUser()
         $questions[$i]["categories"] = $questionCategories;
     }
 
-    echo json_encode($questions);
+    jsonResponse($questions);
 }
 
 function getQuestionsByNumberOfAnswers()
@@ -130,5 +130,5 @@ function getQuestionsByNumberOfAnswers()
         ORDER BY `NumberOfAnswers` $orderBy
     ");
 
-    echo json_encode($questions);
+    jsonResponse($questions);
 }

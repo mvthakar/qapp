@@ -14,23 +14,23 @@ if ($mode != 'signup' && $mode != 'forgot-password') {
 
 if (!isset($request->email)) {
     http_response_code(400);
-    die(json_encode(["message" => "Incomplete data"]));
+    jsonResponseAndDie(["message" => "Incomplete data"]);
 }
 
 $email = $request->email;
 if (!validateEmail($email)) {
     http_response_code(400);
-    die(json_encode(["message" => "Invalid email!"]));
+    jsonResponseAndDie(["message" => "Invalid email!"]);
 }
 
 $user = selectOne("SELECT * FROM `Users` WHERE `Email` = ?", [$email]);
 
 if ($mode == 'signup' && $user != null) {
     http_response_code(409);
-    die(json_encode(["message" => "Could not sign up with this email!"]));
+    jsonResponseAndDie(["message" => "Could not sign up with this email!"]);
 } else if ($mode == 'forgot-password' && $user == null) {
     http_response_code(400);
-    die(json_encode(["message" => "Could not send OTP!"]));
+    jsonResponseAndDie(["message" => "Could not send OTP!"]);
 }
 
 $otp = random_int(111111, 999999);
@@ -50,5 +50,5 @@ try {
 } catch (Exception $e) {
 
     http_response_code(500);
-    die(json_encode(["message" => "Could not send OTP!"]));
+    jsonResponseAndDie(["message" => "Could not send OTP!"]);
 }

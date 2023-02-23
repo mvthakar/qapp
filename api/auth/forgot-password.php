@@ -6,7 +6,7 @@ allowedMethods(['POST']);
 $request = getRequestBody();
 if (!isset($request->otp) || !isset($request->email) || !isset($request->password)) {
     http_response_code(400);
-    die(json_encode(["message" => "Incomplete data"]));
+    jsonResponseAndDie(["message" => "Incomplete data"]);
 }
 
 $otp = $request->otp;
@@ -15,19 +15,19 @@ $password = $request->password;
 
 if (!validateEmail($email)) {
     http_response_code(400);
-    die(json_encode(["message" => "Invalid email!"]));
+    jsonResponseAndDie(["message" => "Invalid email!"]);
 }
 
 $user = selectOne("SELECT * FROM `Users` WHERE `Email` = ?", [$email]);
 if ($user == null) {
     http_response_code(404);
-    die();
+    jsonResponseAndDie(['message'=> 'User not found!']);
 }
 
 $forgotPasswordOtp = selectOne("SELECT * FROM `ForgotPasswordOTPs` WHERE `UserId` = ?", [$user['Id']]);
 if ($forgotPasswordOtp == null || $forgotPasswordOtp['GeneratedOTP'] != $otp) {
     http_response_code(400);
-    die();
+    jsonResponseAndDie(["message" => "Wrong or expired OTP!"]);
 }
 
 $currentDate = new DateTime();
@@ -36,7 +36,7 @@ if ($currentDate > $expiresOn) {
     execute("DELETE FROM `ForgotPasswordOTPs` WHERE `UserId` = ?", [$user['Id']]);
     
     http_response_code(403);
-    die(json_encode(["message" => "Wrong or expired OTP!"]));
+    jsonResponseAndDie(["message" => "Wrong or expired OTP!"]);
 }
 
 $passwordHash = password_hash($password, PASSWORD_DEFAULT);
